@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Live Attack _ P5</title>
+
+    <style>
+      #gf {
+        background: lime;
+        width: 150px;
+        height: 150px;
+        position: absolute;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        text-align: center;
+      }
+
+      #bf {
+        background: red;
+        width: 50px;
+        height: 50px;
+        position: absolute;
+        font-family: 'Courier New', Courier, monospace;
+        text-align: center;
+      }
+
+      body {
+        background: black;
+      }
+
+      #guide {
+        position: fixed;
+        bottom: 25px;
+        left: 25px;
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        color: white;
+      }
+
+      #print {
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+
+    <p id="print">Score: 0, Winning Score: .</p>
+
+    <div id="guide">
+      <p>Click on the bad file, don't click on the good file!</p>
+      <p>Don't let our trusty client down!</p>
+      <p>You must delete the malicious files until it's all clear!</p>
+      <p>Winning score are randomized each time!</p>
+      <button type="button" onclick="back()">Click here to go back or to play again.</button>
+    </div>
+
+      <div id="gf">Good file</div>
+      <div id="bf">Bad file</div>
+
+    <script>
+      let good = document.getElementById("gf");
+      let bad = document.getElementById("bf");
+      let prScore = document.getElementById("print");
+
+      let winningScore = Math.floor(Math.random() * (20 - 10)) + 10;
+      let score = 0;
+      let passed = localStorage.getItem("passed") === "true";
+
+      let x, y;
+      let posX, posY;
+      let int;
+      prScore.textContent = `Score: ${score}, Winning Score: ${winningScore}.`;
+
+      document.addEventListener("click", e => {
+          if (e.target === bad) { score += 1; rerollBad(); }
+          if (e.target === good) { score -= 1; rerollGood(); }
+          if (score < 0) score = 0;
+
+          if (score >= winningScore && !passed) {
+            passed = true;
+            alert("You've beat part 5 and the game!");
+            alert("Thank you for playing!");
+            alert("You will now gain the permisison to replay all parts!")
+            alert("...but also the administrator permisison")
+            alert("It's still WIP though... so be patient!");
+          }
+
+          if (score%10 === 0) {
+            rerollPos();
+          }
+
+          prScore.textContent = `Score: ${score}, Winning Score: ${winningScore}.`;
+          localStorage.setItem("passed", passed);
+
+          if (passed) {
+            if (int) clearInterval(int);
+        int = setInterval(() => {
+              rerollPos();
+          }, 500);
+          prScore.textContent = "You've already won!";
+      }
+
+    })
+
+      function rerollBad() {
+
+        posX = Math.floor(Math.random() * window.innerWidth);
+        posY = Math.floor(Math.random() * window.innerHeight);
+
+        bad.style.left = posX + 'px';
+        bad.style.top = posY + 'px';
+
+        if (x === posX && y === posY) rerollPos();
+      }
+
+      function rerollGood() {
+        x = Math.floor(Math.random() * window.innerWidth);
+        y = Math.floor(Math.random() * window.innerHeight);
+
+        good.style.left = x + 'px';
+        good.style.top = y + 'px';
+
+        if (x === posX && y === posY) rerollPos();  
+      }
+
+      function rerollPos() {
+        posX = Math.floor(Math.random() * window.innerWidth);
+        posY = Math.floor(Math.random() * window.innerHeight);
+
+        bad.style.left = posX + 'px';
+        bad.style.top = posY + 'px';
+
+        x = Math.floor(Math.random() * window.innerWidth);
+        y = Math.floor(Math.random() * window.innerHeight);
+
+        good.style.left = x + 'px';
+        good.style.top = y + 'px';
+
+        if (x === posX && y === posY) rerollPos();  
+      }
+
+      function back() {
+          let ask = confirm("Go back? (click no to retry)");
+
+          if (ask) {
+
+            if (passed) {
+              window.location.href = "av simulator p4.html";
+            } else {
+              alert("Beat the level first!");
+            }
+
+          } else {
+            passed = false;
+            location.reload();
+          }
+
+          localStorage.setItem("passed", passed);
+      }
+
+      if (passed) {
+        if (int) clearInterval(int);
+        int = setInterval(() => {
+              rerollPos();
+          }, 500);
+          prScore.textContent = "You've already won!";
+      }
+
+      rerollPos();
+    </script>
+
+  </body>
+</html>

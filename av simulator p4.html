@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>The Terminal. (P4)</title>
+
+  <style>
+    body {
+      background: black;
+      color: lime;
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    #logs {
+      text-align: center;
+      border: 2px solid lime;
+    }
+
+    #tools {
+      margin: 10px;
+      gap: 100px;
+      display: flex;
+      justify-content: center;
+    }
+  </style>
+</head>
+  <body>
+
+    <div id="logs">
+      <p id="l1">[12:05]: Activity Detected: AUTHORIZED ACCESS | 142-436-543</p>
+      <p id="l2">[13:57]: Action_Type_Download: BUFFER_OVERFLOW | 124-312-342</p>
+      <p id="l3">[14:23]: Login_Type_Failed x3, "Password & Username do not match" | 135-653-234</p>
+      <p id="l4">[14:32]: Activity Detected: "download", cat_pics.png (No hidden extensions found) | LOCAL_NETWORK</p>
+      <p id="l5">[15:12]: DDOS_WARNING: Server has recieved many files and is slowing down. | 143-454-345</p>
+      <p id="l6">[15:43]: Action_Type_Access: ACCESS GRANTED | 154-345-654</p>
+    </div>
+
+    <div id="tools">
+      <button type="button" onclick="block()">Block IP address</button>
+      <input type="text" id="adr" placeholder="Enter IP address here">
+      <button type="button" onclick="options()">Go back to p2 or Go forward to p5</button>
+    </div>
+
+    <p id="result">Executed Command: _run -terminal</p>
+
+    <script>
+
+        let lg1 = document.getElementById("l1");
+        let lg2 = document.getElementById("l2");
+        let lg3 = document.getElementById("l3");
+        let lg4 = document.getElementById("l4");
+        let lg5 = document.getElementById("l5");
+        let lg6 = document.getElementById("l6");
+
+        let corr = 0;
+        let wrng = 0;
+
+        let prRes = document.getElementById("result");
+        let passed = localStorage.getItem("passed") === "true";
+      
+      function block() {
+
+        let addr = document.getElementById("adr").value;
+
+        if (addr === "142-436-543") {
+            wrng++;
+            lg1.remove();
+
+            prRes.textContent = "Executed command: -block 142-436-543.";
+            alert("You blocked an innocent IP address.")
+
+        } else if (addr === "LOCAL_NETWORK") {
+            wrng++;
+            lg4.remove();
+
+            prRes.textContent = "Executed command: -block LOCAL_NETWORK.";
+            alert("You blocked an innocent IP address.")
+
+        } else if (addr === "154-345-654") {
+            wrng++;
+            lg6.remove();
+
+            prRes.textContent = "Executed command: -block 154-345-654.";
+            alert("You blocked an innocent IP address.")
+        } else if (addr === "124-312-342") {
+            corr++;
+            lg2.remove();
+
+            prRes.textContent = "Executed command: -block 124-312-342";
+
+        } else if (addr === "135-653-234") {
+            corr++;
+            lg3.remove();
+          
+            prRes.textContent = "Executed command: -block 135-653-234";
+
+        } else if (addr === "143-454-345") {
+            corr++;
+            lg5.remove();
+
+            prRes.textContent = "Executed command: -block 143-454-345";
+
+        } else {
+          prRes.textContent = `Tried to execute: -block ${addr} but caught error: Invalid IP address.`;
+        }
+
+        if (corr === 3 && wrng === 0) {
+            alert("You've completed Part 4 _ The Terminal!");
+            passed = true;
+        }
+
+        localStorage.setItem("passed", passed)
+      }
+
+      function options() {
+        let ask = confirm("Go forward?");
+
+        if (ask) { 
+          if (passed) { 
+            window.location.href = "av simulator p5.html";
+           } else { 
+            alert("You didn't complete the current level!")
+          } 
+        } else {
+          alert("Navigating");
+          window.location.href = "av simulator p3.html";
+        }
+      }
+    </script>
+
+  </body>
+</html>

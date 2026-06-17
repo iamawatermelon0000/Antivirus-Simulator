@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Reported Attacks. (Part 2)</title>
+
+    <style>
+      #info {
+        display: flex;
+        justify-content: left;
+        flex-direction: column;
+        border: 2px solid red;
+        margin: 10px;
+      }
+
+      #results {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        border: 2px solid black;
+        margin: 10px;
+      }
+
+      #tools {
+        display: flex;
+        justify-content: right;
+        flex-direction: column;
+        border: 2px solid lime;
+        margin: 10px;
+      }
+
+      #pr1, #pr2, #pr3, #pr4, #pr5 {
+        background: sandybrown;
+        margin: 15px;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+  <p>Hint: Find the abnormal running proccess...</p>
+  <p>Info: No more inspecting this time... try harder..</p>
+
+    <div id="info">
+      <div id="pr1">'ddocs-mw.exe' | [CPU Usage: HIGH]</div>
+      <div id="pr2">'Microsoft Edge' | [CPU Usage: Med-low]</div>
+      <div id="pr3">'dG90YWxseSBub3QgYSBiYWNrZG9vcg==.exe' | [CPU Usage: Extremely Low :)]</div>
+      <div id="pr4">'????.???' | [CPU Usage: ???]</div>
+      <div id="pr5">'Windows.bni' | [(Suspicous), CPU Usage: Running]</div>
+    </div>
+
+    <div id="results">
+      <p id="selected">Selecting:</p>
+      <p id="result">Result:</p>
+    </div>
+
+    <div id="tools">
+      <button type="button" onclick="endPr()">End Selected Proccess</button>
+      <button type="button" onclick="back()">Go back to part 1</button>
+      <button type="button" onclick="forward()">Go to part 3 _WIP_</button>
+    </div>
+
+    <script>
+      let p1 = document.getElementById("pr1");
+      let p2 = document.getElementById("pr2");
+      let p3 = document.getElementById("pr3");
+      let p4 = document.getElementById("pr4");
+      let p5 = document.getElementById("pr5");
+
+      let prSelect = document.getElementById("selected");
+      let prRes = document.getElementById("result");
+
+      let selecting = "none";
+      let corr = 0;
+      let wrng = 0;
+      let passed = localStorage.getItem("passed") === "true";
+
+      p1.onclick = () => {
+        selecting = "ddocs-mw.exe"
+        prSelect.textContent = `Selecting: ${selecting}`;
+      }
+      p2.onclick = () => {
+        selecting = "Microsoft Edge"
+        prSelect.textContent = `Selecting: ${selecting}`;
+      }
+      p3.onclick = () => {
+        selecting = "dG90YWxseSBub3QgYSBiYWNrZG9vcg==.exe"
+        prSelect.textContent = `Selecting: ${selecting}`;
+
+        let ask = confirm("Decode?")
+        if (ask) { alert("Decoding..."); alert("Result: totally not a malware") }
+
+      }
+      p4.onclick = () => {
+        selecting = "????.???"
+        prSelect.textContent = `Selecting: ${selecting}`;
+      }
+      p5.onclick = () => {
+        selecting = "Windows.bni"
+        prSelect.textContent = `Selecting: ${selecting}`;
+      }
+
+      function endPr() {
+        if (selecting === "ddocs-mw.exe") {
+            prRes.textContent = "You ended a malicious proccess! :)";
+            p1.remove();
+            corr += 25;
+
+        } else if (selecting === "Microsoft Edge") {
+            prRes.textContent = "You deleted a normal p :(";
+            p2.remove();
+            wrng += 100;
+
+        } else if (selecting === "dG90YWxseSBub3QgYSBiYWNrZG9vcg==.exe") {
+            prRes.textContent = "You ended a malicious proccess! :)";
+            p3.remove();
+            corr += 25;
+
+        } else if (selecting === "????.???") {
+            prRes.textContent = "You ended a malicious proccess! :)";
+            p4.remove();
+            corr += 25;
+
+        } else if (selecting === "Windows.bni") {
+            prRes.textContent = "You ended a malicious proccess! :)";
+            p5.remove();
+            corr += 25;
+
+        } else {
+            prRes.textContent = "No proccesses found.";
+        }
+
+        if (corr === 100) {
+            alert("You ended every malicious proccesses!");
+            alert("You've completed Part 2 _ Reported Attacks!");
+            passed = true;
+
+        } else if (wrng === 100) {
+            alert("You deleted everything :(")
+            alert("Let's retry!")
+            location.reload();
+        }
+
+        localStorage.setItem("passed", passed);
+      }
+
+      function back() {
+        let cf = confirm("Are you sure want to go back?");
+
+        if (cf) {
+          window.location.replace("av simulator p1.html");
+        }
+      }
+
+      function forward() {
+        let ask = confirm("Go forward?");
+
+       if (ask) { 
+          if (passed) { 
+            window.location.href = "av simulator p3.html";
+           } else { 
+            alert("You didn't complete the current level!")
+          } 
+        } else {
+          alert("Navigating");
+          window.location.href = "av simulator p1.html";
+        }
+      }
+
+    </script>
+
+  </body>
+</html>

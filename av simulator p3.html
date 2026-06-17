@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>Part 3 _ The Command Prompt</title>
+
+    <style>
+      #hints {
+        position: fixed;
+        left: 0;
+        bottom: 25px;
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        color: red;
+      }
+
+      #files {
+        font-family: 'Courier New', Courier, monospace;
+        color: lime;
+        text-align: center;
+      }
+
+      #prints {
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        color: blue;
+        text-align: center;
+        border: 2px solid cyan;
+        margin: 10px;
+      }
+
+      #tools {
+        display: flex;
+        justify-content: center;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        gap: 25px;
+      }
+
+      body {
+        background: black;
+      }
+    </style>
+  </head>
+  <body>
+
+    <div id="hints">
+      <p>List of syntaxes: -del, -skip</p>
+      <p>-del: delete the file, -skip: move on.</p>
+      <p>Note: It goes from top to bottom, please remember this.</p>
+      <p>There are 5 files in total.</p>
+    </div>
+
+    <div id="files">
+      <p id="f1">UV LZJHWL MVY FVB.CSR.exe</p>
+      <p id="f2">Microsoft word</p>
+      <p id="f3">System32</p>
+      <p id="f4">Hello World.exe</p>
+      <p id="f5">SysWOW64</p>
+    </div>
+
+    <div id="prints">
+      <p id="result">Correct: 0, Wrong: 0.</p>
+      <p id="info">Note: Deleting the files will take some time. Please remember that it goes from top -> bottom.</p>
+    </div>
+
+    <div id="tools">
+      <button type="button" onclick="execute()">Execute command</button>
+      <input type="text" id="cmd" placeholder="Enter command here">
+      <button type="button" onclick="options()">Go forward or go back</button>
+    </div>
+
+    <script>
+      let clicked = 0;
+      let corr = 0, wrng = 0;
+      let passed = localStorage.getItem("passed") === "true";
+
+      function execute() {
+
+        clicked++;
+        if (clicked > 5 && !passed) { alert("You've done everything!"); location.reload(); }
+        
+        let prFile = "honorable mention";
+        let prRes = document.getElementById("result");
+        let command = document.getElementById("cmd").value;
+
+        const syntax = [
+          "-skip",
+          "-del",
+        ];
+        const ansKey = [
+          "-del",
+          "-skip",
+          "-skip",
+          "-del",
+          "-skip"
+        ];
+        let ckey;
+
+        if (!syntax.includes(command)) { alert("Invalid syntax"); return; };
+        if (clicked === 5) {
+          ckey = ansKey[4]
+        } else if (clicked === 4) {
+          ckey = ansKey[3]
+        } else if (clicked === 3) {
+          ckey = ansKey[2]
+        } else if (clicked === 2) {
+          ckey = ansKey[1]
+        } else if (clicked === 1) {
+          ckey = ansKey[0]
+        }
+
+        if (command === ckey) {
+            corr++;
+            prRes.textContent = `Correct: ${corr}, Wrong: ${wrng}.`;
+        } else {
+            wrng++;
+            clicked--;
+            prRes.textContent = `Correct: ${corr}, Wrong: ${wrng}.`;
+        }
+
+        if (corr === 5 && wrng === 0) {
+          passed = true;
+          alert("You've completed P3 _ The Command Prompt!")
+        }
+
+        alert(`Executed command: ${command}`)
+
+        localStorage.setItem("passed", passed);
+      }
+
+      function options() {
+        let ask = confirm("Go forward?");
+
+        if (ask) { if (passed) { window.location.href = "av simulator p4.html"; } else { alert("You didn't complete the current level!")} } else if (!ask) { window.location.href = "av simulator p2.html" } 
+      }
+    </script>
+
+  </body>
+</html>
